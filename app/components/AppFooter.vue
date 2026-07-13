@@ -10,8 +10,8 @@ const year = new Date().getFullYear()
           class="footer-logo"
           src="/keywordwalks.png"
           alt="keywordwalks"
-          width="260"
-          height="52"
+          width="360"
+          height="72"
         >
         <p class="muted">
           For bloggers, content creators, and SEO professionals. Keyword research, on-page SEO,
@@ -58,9 +58,9 @@ const year = new Date().getFullYear()
 
 .footer-logo {
   display: block;
-  height: 2.85rem;
+  height: 4rem;
   width: auto;
-  max-width: 260px;
+  max-width: 360px;
   object-fit: contain;
   object-position: left center;
   margin-bottom: 0.85rem;

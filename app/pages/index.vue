@@ -107,47 +107,17 @@ const trustItems = [
           </Reveal>
         </div>
 
-        <Reveal class="hero-visual" variant="right" :delay="200" aria-hidden="true">
+        <Reveal class="hero-visual" variant="right" :delay="200">
           <div class="hero-panel">
-            <div class="panel-top">
-              <span class="dot" />
-              <span class="dot" />
-              <span class="dot" />
-              <span class="url">yourblog.com/how-to-rank</span>
-            </div>
-            <div class="panel-body">
-              <div class="score-block">
-                <div class="score-ring">
-                  <span>84</span>
-                </div>
-                <div>
-                  <p class="score-label">Overall SEO score</p>
-                  <p class="score-sub">Blog · weighted scoring</p>
-                </div>
-              </div>
-              <div class="bars">
-                <div class="bar-row">
-                  <span>Content</span>
-                  <div class="track"><i style="--w: 88%" /></div>
-                </div>
-                <div class="bar-row">
-                  <span>Technical</span>
-                  <div class="track"><i style="--w: 76%" /></div>
-                </div>
-                <div class="bar-row">
-                  <span>Performance</span>
-                  <div class="track"><i style="--w: 69%" /></div>
-                </div>
-                <div class="bar-row">
-                  <span>Accessibility</span>
-                  <div class="track"><i style="--w: 91%" /></div>
-                </div>
-              </div>
-              <div class="insight">
-                <p class="insight-label">Why this page ranks</p>
-                <p>Strong H1 hierarchy · FAQ schema · keyword in first 100 words</p>
-              </div>
-            </div>
+            <img
+              class="hero-shot"
+              src="/hero.png"
+              alt="keywordwalks extension panel showing Overview score, category bars, and positives checklist"
+              width="699"
+              height="652"
+              loading="eager"
+              decoding="async"
+            >
           </div>
         </Reveal>
       </div>
@@ -286,7 +256,7 @@ const trustItems = [
         <Reveal as="ul" variant="right" :delay="120">
           <li>No accounts or authentication</li>
           <li>No server-side page scraping</li>
-          <li>Ideal for unpublished drafts and client work</li>
+          <li>History and checklists stay on this device only</li>
           <li>MIT-licensed extension codebase</li>
         </Reveal>
       </div>
@@ -298,18 +268,26 @@ const trustItems = [
           <p class="eyebrow">Get started</p>
           <h2>Install keywordwalks and audit your first page</h2>
           <p class="muted">
-            Build the Chrome MV3 extension, load it unpacked, then open any https page to research
-            keywords, check indexability, and optimize on-page SEO.
+            keywordwalks is on the Chrome Web Store. Install it in Chrome, pin it to your toolbar,
+            then open any https page to research keywords, check indexability, and improve on-page SEO —
+            all locally in your browser.
           </p>
           <ol class="steps-list">
-            <li>Run <code>npm run build</code> in the Seo Engineer extension project</li>
-            <li>Open <code>chrome://extensions</code> and enable Developer mode</li>
-            <li>Load unpacked from <code>dist/chrome-mv3</code></li>
-            <li>Click the toolbar icon — or press Alt+Shift+S</li>
+            <li>Open keywordwalks on the <strong>Chrome Web Store</strong></li>
+            <li>Click <strong>Add to Chrome</strong> to install the extension</li>
+            <li>Pin keywordwalks to your toolbar for quick access</li>
+            <li>Open any page and run an SEO audit — or press Alt+Shift+S</li>
           </ol>
           <div class="cta-row">
-            <NuxtLink to="/features" class="btn btn-primary">Explore every feature</NuxtLink>
-            <NuxtLink to="/about" class="btn btn-ghost">About keywordwalks</NuxtLink>
+            <a
+              class="btn btn-primary"
+              href="https://chromewebstore.google.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Install from Chrome Web Store
+            </a>
+            <NuxtLink to="/features" class="btn btn-ghost">Explore every feature</NuxtLink>
           </div>
         </Reveal>
       </div>
@@ -399,8 +377,7 @@ const trustItems = [
 .hero-panel {
   border: 1px solid var(--border-strong);
   border-radius: 18px;
-  background:
-    linear-gradient(160deg, rgba(10, 22, 24, 0.96), rgba(4, 8, 9, 0.98));
+  background: #050505;
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.55),
     0 0 40px rgba(0, 232, 240, 0.06),
@@ -418,125 +395,10 @@ const trustItems = [
     inset 0 1px 0 rgba(0, 232, 240, 0.12);
 }
 
-.panel-top {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #334155;
-}
-
-.dot:nth-child(1) {
-  background: #f07178;
-}
-.dot:nth-child(2) {
-  background: #f0b429;
-}
-.dot:nth-child(3) {
-  background: var(--accent);
-}
-
-.url {
-  margin-left: 0.5rem;
-  font-size: 0.78rem;
-  color: var(--text-dim);
-}
-
-.panel-body {
-  padding: 1.35rem 1.25rem 1.4rem;
-}
-
-.score-block {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.35rem;
-}
-
-.score-ring {
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(circle at center, var(--bg-elevated) 58%, transparent 59%),
-    conic-gradient(var(--accent) 0 84%, rgba(148, 163, 184, 0.2) 0);
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 700;
-  box-shadow: 0 0 24px rgba(0, 232, 240, 0.15);
-}
-
-.score-label {
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.score-sub {
-  color: var(--text-dim);
-  font-size: 0.82rem;
-}
-
-.bars {
-  display: grid;
-  gap: 0.7rem;
-  margin-bottom: 1.2rem;
-}
-
-.bar-row {
-  display: grid;
-  grid-template-columns: 7rem 1fr;
-  gap: 0.75rem;
-  align-items: center;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.track {
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.15);
-  overflow: hidden;
-}
-
-.track i {
+.hero-shot {
+  width: 100%;
+  height: auto;
   display: block;
-  height: 100%;
-  width: var(--w);
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent), var(--accent-lime));
-  transform-origin: left center;
-  animation: bar-grow 1.1s var(--ease-out) 0.6s both;
-}
-
-.insight {
-  padding: 0.9rem 1rem;
-  border-radius: 12px;
-  background: var(--accent-dim);
-  border: 1px solid rgba(0, 232, 240, 0.22);
-}
-
-.insight-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.35rem;
-}
-
-.insight p:last-child {
-  font-size: 0.9rem;
-  color: var(--text);
 }
 
 .trust {
@@ -767,8 +629,10 @@ const trustItems = [
   gap: 0.45rem;
 }
 
-.steps-list code {
+.steps-list code,
+.steps-list strong {
   font-size: 0.88em;
+  font-weight: 600;
   color: var(--accent);
   background: var(--accent-dim);
   padding: 0.1rem 0.35rem;
@@ -802,8 +666,7 @@ const trustItems = [
   .hero-orb,
   .hero-panel,
   .hero-title,
-  .marquee-track,
-  .track i {
+  .marquee-track {
     animation: none !important;
   }
 }

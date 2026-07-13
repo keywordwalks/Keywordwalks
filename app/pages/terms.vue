@@ -1,8 +1,8 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Terms of Service — SEO Reverse Engineer',
+  title: 'Terms of Service — keywordwalks',
   description:
-    'Terms governing use of the SEO Reverse Engineer Chrome extension and marketing website.',
+    'Terms governing use of the keywordwalks Chrome extension and marketing website.',
 })
 </script>
 
@@ -14,14 +14,14 @@ useSeoMeta({
 
       <Reveal class="legal-prose" :delay="140">
         <p>
-          These Terms of Service (“Terms”) govern your access to and use of the SEO Reverse Engineer
+          These Terms of Service (“Terms”) govern your access to and use of the keywordwalks
           Chrome extension, related documentation, and this marketing website (collectively, the
           “Service”). By installing or using the Service, you agree to these Terms.
         </p>
 
         <h2>1. The Service</h2>
         <p>
-          SEO Reverse Engineer provides client-side on-page SEO analysis tools that inspect the
+          keywordwalks provides client-side on-page SEO analysis tools that inspect the
           rendered content of pages you choose to analyze in your browser. Features may include
           scoring, issue detection, history, compare, overlays, exports, and configurable settings.
           Functionality may change between versions.

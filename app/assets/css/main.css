@@ -125,13 +125,23 @@ h3,
 .display {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 1.1;
+  /* Syne clips descenders below ~1.2; keep room for g/y/p */
+  line-height: 1.25;
   letter-spacing: -0.03em;
   margin: 0;
+  overflow: visible;
+  padding-bottom: 0.06em;
 }
 
 p {
   margin: 0;
+  overflow: visible;
+  line-height: 1.65;
+}
+
+li {
+  overflow: visible;
+  line-height: 1.65;
 }
 
 .muted {
@@ -270,11 +280,16 @@ p {
 /* —— Scroll reveal system —— */
 .reveal-io {
   opacity: 0;
-  will-change: transform, opacity, filter;
+  overflow: visible;
+  /* will-change only while animating — permanent layers clip descenders in Chrome */
   transition:
     opacity 0.85s var(--ease-out),
     transform 0.85s var(--ease-out),
     filter 0.85s var(--ease-out);
+}
+
+.reveal-io:not(.is-inview) {
+  will-change: transform, opacity, filter;
 }
 
 .reveal-up {
@@ -306,6 +321,7 @@ p {
   opacity: 1;
   transform: none;
   filter: none;
+  will-change: auto;
 }
 
 /* —— Page transitions —— */

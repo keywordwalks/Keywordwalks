@@ -282,19 +282,19 @@ const settings = [
     <section class="section limits">
       <div class="container">
         <Reveal class="section-head">
-          <p class="eyebrow">By design</p>
-          <h2>Clear limits, honest signals</h2>
+          <p class="eyebrow">Built to win</p>
+          <h2>Turn every page into a ranking opportunity</h2>
           <p>
-            Built as a local DOM auditor for improving on-page SEO and indexing readiness —
-            not a Search Console or rank-tracking replacement.
+            keywordwalks gives bloggers, creators, and SEO pros a clear path from audit to action —
+            so you fix what matters, ship faster, and improve visibility with confidence.
           </p>
         </Reveal>
         <Reveal as="ul" class="limits-list" :delay="80">
-          <li>Broken link checks may be incomplete due to CORS, timeouts, and caps</li>
-          <li>Rule-based recommendations only — no AI-generated suggestions</li>
-          <li>Cannot analyze chrome://, chrome-extension://, or Web Store pages</li>
-          <li>No raw server headers such as X-Robots-Tag</li>
-          <li>Performance is lab / on-page — not field CrUX data</li>
+          <li>See keyword gaps, metadata issues, and structure problems in one local pass</li>
+          <li>Prioritized fixes you can apply immediately — not vague advice</li>
+          <li>Catch indexability blockers before they cost you crawl budget</li>
+          <li>Re-audit after edits to prove what improved and what still needs work</li>
+          <li>Keep drafts and client sites private while you optimize for search</li>
         </Reveal>
         <Reveal class="cta-row" :delay="160">
           <NuxtLink to="/#get-started" class="btn btn-primary">Get started</NuxtLink>

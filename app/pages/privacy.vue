@@ -1,8 +1,8 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Privacy Policy — SEO Reverse Engineer',
+  title: 'Privacy Policy — keywordwalks',
   description:
-    'How SEO Reverse Engineer handles data: client-side analysis, Chrome storage, and no backend collection.',
+    'How keywordwalks handles data: client-side analysis, Chrome storage, and no backend collection.',
 })
 </script>
 
@@ -14,7 +14,7 @@ useSeoMeta({
 
       <Reveal class="legal-prose" :delay="140">
         <p>
-          SEO Reverse Engineer (“we”, “the extension”, “the product”) is a Chrome browser extension
+          keywordwalks (“we”, “the extension”, “the product”) is a Chrome browser extension
           and accompanying marketing website. This Privacy Policy explains what information is
           processed when you use the extension and this website.
         </p>
@@ -91,7 +91,7 @@ useSeoMeta({
 
         <h2>10. Contact</h2>
         <p>
-          For privacy questions about SEO Reverse Engineer, contact the project maintainer through
+          For privacy questions about keywordwalks, contact the project maintainer through
           the repository or distribution channel where you obtained the extension.
         </p>
       </Reveal>

@@ -14,29 +14,31 @@ const year = new Date().getFullYear()
           height="72"
         >
         <p class="muted">
-          Walk any page. Find what competitors forgot. Write faster, earn more clicks, and fix what
-          blocks rankings — privately in Chrome.
+          Research workspace for the open tab. Research. Analyze. Compare. Improve. Publish —
+          privately in Chrome.
         </p>
       </div>
 
-      <div class="col">
-        <p class="label">Product</p>
-        <NuxtLink to="/">Home</NuxtLink>
-        <NuxtLink to="/features">Features</NuxtLink>
-        <NuxtLink to="/about">About</NuxtLink>
-        <NuxtLink to="/#get-started">Install</NuxtLink>
-      </div>
+      <div class="link-cols">
+        <div class="col">
+          <p class="label">Product</p>
+          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/features">Features</NuxtLink>
+          <NuxtLink to="/about">About</NuxtLink>
+          <NuxtLink to="/#get-started">Add to Chrome</NuxtLink>
+        </div>
 
-      <div class="col">
-        <p class="label">Legal</p>
-        <NuxtLink to="/privacy">Privacy Policy</NuxtLink>
-        <NuxtLink to="/terms">Terms of Service</NuxtLink>
+        <div class="col">
+          <p class="label">Legal</p>
+          <NuxtLink to="/privacy">Privacy Policy</NuxtLink>
+          <NuxtLink to="/terms">Terms of Service</NuxtLink>
+        </div>
       </div>
     </div>
 
     <div class="container bottom">
       <p>© {{ year }} keywordwalks. All rights reserved.</p>
-      <p class="muted">Built for local analysis · MIT-licensed extension</p>
+      <p class="muted">Research workspace · local analysis · MIT-licensed extension</p>
     </div>
   </footer>
 </template>
@@ -54,6 +56,10 @@ const year = new Date().getFullYear()
   grid-template-columns: 1.6fr 1fr 1fr;
   gap: 2.5rem;
   padding-bottom: 2.5rem;
+}
+
+.link-cols {
+  display: contents;
 }
 
 .footer-logo {
@@ -119,6 +125,32 @@ const year = new Date().getFullYear()
   .grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+
+  .link-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 2.5rem 0 1.5rem;
+  }
+
+  .footer-logo {
+    height: 3rem;
+    max-width: 240px;
+  }
+
+  .link-cols {
+    gap: 1.25rem;
+  }
+
+  .bottom {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
 </style>

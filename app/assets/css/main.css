@@ -95,6 +95,24 @@ button {
   margin-inline: auto;
 }
 
+@media (max-width: 480px) {
+  .container {
+    width: min(100% - 1.5rem, var(--max));
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+
+  .btn {
+    padding: 0.8rem 1.15rem;
+  }
+
+  :root {
+    --header-h: 72px;
+  }
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;

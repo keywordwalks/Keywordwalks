@@ -1,25 +1,87 @@
 <script setup lang="ts">
 const storeUrl = 'https://chromewebstore.google.com/'
+const ctaFriction = 'No Signup · 30 Seconds Setup'
 
 useSeoMeta({
-  title: 'KeywordWalks — Find keywords your competitors forgot',
+  title: 'KeywordWalks — Research workspace for the open tab',
   description:
-    'The Chrome SEO extension for bloggers, creators, and SEO pros. Walk any page, see why it ranks, and know what to write next — privately, in your browser.',
+    'Research. Analyze. Compare. Improve. Publish. KeywordWalks is a private Chrome research workspace for bloggers, creators, and SEO pros.',
 })
 
+const reduceMotion = ref(false)
+const heroReady = ref(false)
 const heroActive = ref(false)
 const scanPlaying = ref(false)
-let scanTimer: ReturnType<typeof setTimeout> | null = null
+const metricsReady = ref(false)
 
-const metricHighlights = [
-  { label: 'SEO score', value: '78', top: '18%', left: '12%' },
-  { label: 'Content', value: '72', top: '38%', left: '58%' },
-  { label: 'Fixes', value: '12', top: '62%', left: '22%' },
+const spotlight = reactive({ x: 70, y: 40, on: false })
+const parallax = reactive({ x: 0, y: 0 })
+
+const heroRef = ref<HTMLElement | null>(null)
+const demoRef = ref<HTMLElement | null>(null)
+
+let scanTimer: ReturnType<typeof setTimeout> | null = null
+let typeTimer: ReturnType<typeof setTimeout> | null = null
+let serpTimer: ReturnType<typeof setInterval> | null = null
+let countRaf = 0
+
+const metricHighlights = reactive([
+  { label: 'SEO score', target: 78, display: 0, fill: 0, top: '16%', left: '10%' },
+  { label: 'Content', target: 72, display: 0, fill: 0, top: '36%', left: '56%' },
+  { label: 'Difficulty', target: 64, display: 0, fill: 0, top: '58%', left: '18%' },
+])
+
+const floatChips = [
+  { label: 'keyword gap', top: '8%', left: '-4%', delay: '0s' },
+  { label: 'competitor', top: '22%', left: '88%', delay: '0.6s' },
+  { label: 'on-page', top: '72%', left: '-6%', delay: '1.2s' },
+  { label: 'intent', top: '78%', left: '86%', delay: '1.8s' },
+  { label: 'score', top: '48%', left: '92%', delay: '0.3s' },
 ]
+
+const searchPhrases = [
+  'competitorsite.com/blog/...',
+  'my draft — untitled post',
+  'best seo tools 2026',
+]
+const typedText = ref('')
+const phraseIndex = ref(0)
+
+const serpResults = [
+  { rank: 1, title: 'Ultimate ML Guide' },
+  { rank: 2, title: 'What is AI? Explained' },
+  { rank: 3, title: 'Machine Learning Basics' },
+]
+const serpHighlight = ref(0)
+
+function animateCounts() {
+  if (reduceMotion.value) {
+    for (const m of metricHighlights) {
+      m.display = m.target
+      m.fill = m.target
+    }
+    metricsReady.value = true
+    return
+  }
+  const start = performance.now()
+  const duration = 1400
+  const tick = (now: number) => {
+    const t = Math.min(1, (now - start) / duration)
+    const eased = 1 - (1 - t) ** 3
+    for (const m of metricHighlights) {
+      m.display = Math.round(m.target * eased)
+      m.fill = Math.round(m.target * eased)
+    }
+    if (t < 1) countRaf = requestAnimationFrame(tick)
+    else metricsReady.value = true
+  }
+  countRaf = requestAnimationFrame(tick)
+}
 
 function playScan() {
   if (scanPlaying.value) return
   scanPlaying.value = true
+  if (!metricsReady.value) animateCounts()
   if (scanTimer) clearTimeout(scanTimer)
   scanTimer = setTimeout(() => {
     scanPlaying.value = false
@@ -35,8 +97,71 @@ function onHeroLeave() {
   heroActive.value = false
 }
 
+function onHeroPointer(e: PointerEvent) {
+  if (reduceMotion.value || !heroRef.value) return
+  const rect = heroRef.value.getBoundingClientRect()
+  spotlight.x = ((e.clientX - rect.left) / rect.width) * 100
+  spotlight.y = ((e.clientY - rect.top) / rect.height) * 100
+  spotlight.on = true
+  if (demoRef.value) {
+    const d = demoRef.value.getBoundingClientRect()
+    const px = (e.clientX - d.left) / d.width - 0.5
+    const py = (e.clientY - d.top) / d.height - 0.5
+    parallax.x = px * 10
+    parallax.y = py * 8
+  }
+}
+
+function onHeroPointerLeave() {
+  spotlight.on = false
+  parallax.x = 0
+  parallax.y = 0
+}
+
+function typeLoop() {
+  if (reduceMotion.value) {
+    typedText.value = searchPhrases[0]
+    return
+  }
+  const phrase = searchPhrases[phraseIndex.value]
+  let i = 0
+  typedText.value = ''
+  const typeNext = () => {
+    if (i <= phrase.length) {
+      typedText.value = phrase.slice(0, i)
+      i += 1
+      typeTimer = setTimeout(typeNext, 42)
+      return
+    }
+    typeTimer = setTimeout(() => {
+      phraseIndex.value = (phraseIndex.value + 1) % searchPhrases.length
+      typeLoop()
+    }, 1600)
+  }
+  typeNext()
+}
+
+onMounted(() => {
+  reduceMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  requestAnimationFrame(() => {
+    heroReady.value = true
+  })
+  typeLoop()
+  if (!reduceMotion.value) {
+    setTimeout(() => playScan(), 700)
+    serpTimer = setInterval(() => {
+      serpHighlight.value = (serpHighlight.value + 1) % serpResults.length
+    }, 1800)
+  } else {
+    animateCounts()
+  }
+})
+
 onBeforeUnmount(() => {
   if (scanTimer) clearTimeout(scanTimer)
+  if (typeTimer) clearTimeout(typeTimer)
+  if (serpTimer) clearInterval(serpTimer)
+  if (countRaf) cancelAnimationFrame(countRaf)
 })
 
 const philosophy = [
@@ -46,11 +171,11 @@ const philosophy = [
   },
   {
     title: 'Work where the page lives',
-    body: 'Their blog, your draft, a client URL. Open it in Chrome and walk the ranking signals in place.',
+    body: 'Their blog, your draft, a client URL. Research in Chrome, on the live page, without cloud scrapes.',
   },
   {
     title: 'Private by design',
-    body: 'Drafts, staging, and client sites stay on your machine. No login. No cloud scrape. No account wall.',
+    body: 'Drafts, staging, and client sites stay on your machine. No login. No account wall.',
   },
 ]
 
@@ -71,22 +196,22 @@ const withItems = [
 const audiences = [
   {
     title: 'Bloggers',
-    body: 'Ship posts that earn readers — not guesswork. Spot gaps before you publish, then re-walk after edits.',
+    body: 'Ship posts that earn readers — not guesswork. Research gaps before you publish, then re-walk after edits.',
   },
   {
     title: 'Content creators',
-    body: 'Turn competitive pages into a briefing. Know depth, structure, and hooks before you draft the next piece.',
+    body: 'Turn competitive pages into a briefing. Know depth, structure, and hooks before you draft.',
   },
   {
     title: 'SEO professionals',
-    body: 'Audit faster, explain clearer, export for clients. History, compare, and prioritized fixes without spreadsheet theater.',
+    body: 'Research faster, explain clearer, export for clients. History, compare, and prioritized fixes.',
   },
 ]
 
 const outcomes = [
   {
     title: 'Write faster, with less guesswork',
-    body: 'See what the page already covers — and what’s missing — so your next draft starts with direction, not a blank cursor.',
+    body: 'See what the page already covers — and what’s missing — so your next draft starts with direction.',
   },
   {
     title: 'Steal the ranking path, not just keywords',
@@ -94,41 +219,42 @@ const outcomes = [
   },
   {
     title: 'More clicks from titles that actually work',
-    body: 'Title, meta, headings, and previews in one pass — so search snippets earn the click, not just the impression.',
+    body: 'Title, meta, headings, and previews in one pass — so snippets earn the click.',
   },
   {
     title: 'Unblock pages that should already rank',
-    body: 'Catch indexing and technical blockers before they waste crawl budget — then fix, re-audit, and prove the lift.',
+    body: 'Catch indexing and technical blockers — then fix, re-audit, and prove the lift.',
   },
 ]
 
 const journey = [
-  { step: '01', title: 'Open blog', body: 'Land on your draft or a competitor URL.' },
-  { step: '02', title: 'Click extension', body: 'Toolbar, side panel, or Alt+Shift+S.' },
-  { step: '03', title: 'Scan page', body: 'Sixteen analyzers read the live DOM.' },
-  { step: '04', title: 'See SEO score', body: 'Overall + category breakdowns in seconds.' },
-  { step: '05', title: 'Compare competitor', body: 'Diff scores, content, and technical gaps.' },
-  { step: '06', title: 'Ship improvements', body: 'Prioritized fixes with copy-ready snippets.' },
+  { step: '01', title: 'Research', body: 'Open a draft, competitor, or client URL.' },
+  { step: '02', title: 'Analyze', body: 'One click — sixteen analyzers on the live DOM.' },
+  { step: '03', title: 'Compare', body: 'Diff scores and category gaps vs History.' },
+  { step: '04', title: 'Improve', body: 'Prioritized fixes with copy-ready snippets.' },
+  { step: '05', title: 'Publish', body: 'Ship the change. Re-walk to prove progress.' },
+  { step: '06', title: 'Repeat', body: 'Your ranking trail stays on this device.' },
 ]
 
 const trustItems = [
-  'Walk any page',
-  'Competitor paths',
-  'Faster drafts',
-  'More clicks',
-  'Indexing clarity',
-  '16 analyzers',
-  'Private by design',
-  'PDF export',
+  'Research',
+  'Analyze',
+  'Compare',
+  'Improve',
+  'Publish',
+  'No signup',
+  'History & Compare',
+  '30 seconds setup',
 ]
 
 const freeTeasers = [
   {
     title: 'History',
-    body: 'Your ranking trail, saved locally — reopen any past audit in one click.',
+    body: 'Your research trail, saved locally — reopen any past audit in one click.',
     image: '/histioryfeature.png',
     alt: 'KeywordWalks Audit history panel',
     to: '/features#history',
+    badge: 'Included now',
   },
   {
     title: 'Compare',
@@ -136,20 +262,36 @@ const freeTeasers = [
     image: '/comparefeature.png',
     alt: 'KeywordWalks Compare score delta view',
     to: '/features#compare',
+    badge: 'Included now',
   },
   {
     title: 'Settings',
-    body: 'Tune keywords, SPA wait, and analysis depth — power controls, free forever.',
+    body: 'Tune keywords, SPA wait, and analysis depth — power controls, no account required.',
     image: '/settingsfeature.png',
     alt: 'KeywordWalks Settings panel',
     to: '/features#settings',
+    badge: 'Included now',
   },
 ]
 </script>
 
 <template>
   <div class="home">
-    <section class="hero">
+    <section
+      ref="heroRef"
+      class="hero"
+      :class="{ ready: heroReady }"
+      @pointermove="onHeroPointer"
+      @pointerleave="onHeroPointerLeave"
+    >
+      <div
+        class="hero-spotlight"
+        aria-hidden="true"
+        :style="{
+          opacity: spotlight.on ? 1 : 0,
+          background: `radial-gradient(520px circle at ${spotlight.x}% ${spotlight.y}%, rgba(0,232,240,0.14), transparent 55%)`,
+        }"
+      />
       <div class="hero-glow" aria-hidden="true" />
       <div class="hero-orb hero-orb-a" aria-hidden="true" />
       <div class="hero-orb hero-orb-b" aria-hidden="true" />
@@ -174,66 +316,108 @@ const freeTeasers = [
           </linearGradient>
         </defs>
       </svg>
+
       <div class="container hero-grid">
         <div class="hero-copy">
-          <Reveal as="p" class="eyebrow" :delay="0">KeywordWalks · bloggers · creators · SEO pros</Reveal>
+          <Reveal as="p" class="eyebrow" :delay="0">Research workspace · in Chrome</Reveal>
           <Reveal as="h1" class="display hero-title" variant="blur" :delay="80">
             Find keywords your<br />competitors forgot.
           </Reveal>
           <Reveal as="p" class="lede" :delay="180">
-            Open any page. Walk the path that earns rankings — then write, fix, and publish knowing
-            exactly what matters next. Private. Local. Built for people who need readers, not another
-            dashboard.
+            Research. Analyze. Compare. Improve. Publish. Walk any open page — privately —
+            and leave with a clear next step. Not another SEO tool. A research workspace.
           </Reveal>
-          <Reveal class="cta-row" :delay="280">
-            <a
-              class="btn btn-primary"
-              :href="storeUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Install free
-            </a>
-            <NuxtLink to="#why" class="btn btn-ghost">Why KeywordWalks</NuxtLink>
+          <Reveal class="cta-stack" :delay="280">
+            <div class="cta-row">
+              <a
+                class="btn btn-primary"
+                :href="storeUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Add to Chrome
+              </a>
+              <NuxtLink to="#why" class="btn btn-ghost">Why KeywordWalks</NuxtLink>
+            </div>
+            <p class="cta-friction">{{ ctaFriction }}</p>
           </Reveal>
         </div>
 
         <Reveal class="hero-visual" variant="right" :delay="200">
-          <button
-            type="button"
-            class="hero-demo"
-            :class="{ active: heroActive, scanning: scanPlaying }"
-            aria-label="Play KeywordWalks demo scan. Hover or click to animate."
-            @mouseenter="onHeroEnter"
-            @mouseleave="onHeroLeave"
-            @focus="onHeroEnter"
-            @blur="onHeroLeave"
-            @click="playScan"
-          >
-            <span class="demo-hint">Hover to scan</span>
-            <div class="hero-panel">
-              <img
-                class="hero-shot"
-                src="/hero.png"
-                alt="KeywordWalks extension panel showing Overview score, category bars, and positives checklist"
-                width="699"
-                height="652"
-                loading="eager"
-                decoding="async"
-              >
-              <span class="scan-beam" aria-hidden="true" />
-              <span
-                v-for="(m, i) in metricHighlights"
-                :key="m.label"
-                class="metric-chip"
-                :class="{ show: heroActive || scanPlaying }"
-                :style="{ top: m.top, left: m.left, animationDelay: `${i * 0.18}s` }"
-              >
-                <span class="metric-label">{{ m.label }}</span>
-                <span class="metric-value">{{ m.value }}</span>
-              </span>
+          <div ref="demoRef" class="demo-wrap">
+            <span
+              v-for="chip in floatChips"
+              :key="chip.label"
+              class="float-chip"
+              :style="{ top: chip.top, left: chip.left, animationDelay: chip.delay }"
+              aria-hidden="true"
+            >
+              {{ chip.label }}
+            </span>
+
+            <div class="search-mock" aria-hidden="true">
+              <span class="search-icon" />
+              <span class="search-text">{{ typedText }}<span class="caret" /></span>
             </div>
-          </button>
+
+            <button
+              type="button"
+              class="hero-demo"
+              :class="{ active: heroActive, scanning: scanPlaying, ready: heroReady }"
+              aria-label="Play KeywordWalks demo scan. Hover or click to animate."
+              @mouseenter="onHeroEnter"
+              @mouseleave="onHeroLeave"
+              @focus="onHeroEnter"
+              @blur="onHeroLeave"
+              @click="playScan"
+            >
+              <span class="demo-hint">Hover to scan</span>
+              <div
+                class="hero-panel"
+                :style="{
+                  transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)`,
+                }"
+              >
+                <img
+                  class="hero-shot"
+                  src="/hero.png"
+                  alt="KeywordWalks research workspace showing Overview score and insights"
+                  width="699"
+                  height="652"
+                  loading="eager"
+                  decoding="async"
+                >
+                <span class="scan-beam" aria-hidden="true" />
+                <span
+                  v-for="(m, i) in metricHighlights"
+                  :key="m.label"
+                  class="metric-chip"
+                  :class="{ show: heroActive || scanPlaying || metricsReady }"
+                  :style="{ top: m.top, left: m.left, animationDelay: `${i * 0.18}s` }"
+                >
+                  <span class="metric-label">{{ m.label }}</span>
+                  <span class="metric-value">{{ m.display }}</span>
+                  <span class="metric-bar" aria-hidden="true">
+                    <span class="metric-fill" :style="{ width: `${m.fill}%` }" />
+                  </span>
+                </span>
+              </div>
+            </button>
+
+            <div class="serp-mock" aria-hidden="true">
+              <p class="serp-label">Live SERP path</p>
+              <ul>
+                <li
+                  v-for="(row, i) in serpResults"
+                  :key="row.rank"
+                  :class="{ hot: serpHighlight === i }"
+                >
+                  <span class="serp-rank">{{ row.rank }}</span>
+                  <span>{{ row.title }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </Reveal>
       </div>
     </section>
@@ -252,11 +436,11 @@ const freeTeasers = [
       <div class="container">
         <Reveal class="section-head">
           <p class="eyebrow">Why KeywordWalks?</p>
-          <h2>Most SEO tools overwhelm you. We show the path.</h2>
+          <h2>Most tools overwhelm you. A research workspace shows the path.</h2>
           <p>
             KeywordWalks doesn’t dump endless data. It tells you what matters on the page you’re
-            looking at, why it matters, and what to do next — so you can create faster, compete
-            smarter, and get more readers.
+            looking at, why it matters, and what to do next — so you can research, improve, and publish
+            with confidence.
           </p>
         </Reveal>
 
@@ -311,7 +495,7 @@ const freeTeasers = [
       <div class="container">
         <Reveal class="section-head">
           <p class="eyebrow">Who it’s for</p>
-          <h2>One trail. Three ways to win.</h2>
+          <h2>One research workspace. Three ways to win.</h2>
           <p>
             Whether you publish daily, produce content at scale, or run SEO for clients — you want
             more readers, more clicks, and a clearer next move.
@@ -364,8 +548,8 @@ const freeTeasers = [
       <div class="container">
         <Reveal class="section-head">
           <p class="eyebrow">The workflow</p>
-          <h2>From open tab to shipped improvements.</h2>
-          <p>Not another grid of feature cards — the path you actually take.</p>
+          <h2>Research. Analyze. Compare. Improve. Publish.</h2>
+          <p>The path of a research workspace — not a grid of feature cards.</p>
         </Reveal>
 
         <ol class="journey">
@@ -388,11 +572,11 @@ const freeTeasers = [
     <section class="section free-teaser-section">
       <div class="container">
         <Reveal class="section-head">
-          <p class="eyebrow">Freely included</p>
-          <h2>Premium workflow. Zero paywall.</h2>
+          <p class="eyebrow">Included now</p>
+          <h2>History. Compare. Settings.</h2>
           <p>
-            History, Compare, and Settings — the tools other products gate — ship free with
-            KeywordWalks. No account. No upgrade.
+            Workflow tools other products lock away — available in KeywordWalks with no account
+            and no signup. Install and start researching in about 30 seconds.
           </p>
         </Reveal>
 
@@ -415,7 +599,7 @@ const freeTeasers = [
                   decoding="async"
                 >
               </div>
-              <span class="teaser-badge">Free forever</span>
+              <span class="teaser-badge">{{ item.badge }}</span>
               <h3>{{ item.title }}</h3>
               <p>{{ item.body }}</p>
             </NuxtLink>
@@ -455,27 +639,30 @@ const freeTeasers = [
       <div class="container">
         <Reveal class="cta-panel" variant="scale">
           <p class="eyebrow">Get started</p>
-          <h2>Install KeywordWalks. Walk your first page.</h2>
+          <h2>Add KeywordWalks. Research your first page.</h2>
           <p class="muted">
-            On the Chrome Web Store. Pin it, open any https page, and see the path — keywords,
-            structure, blockers, and fixes — without sending the page anywhere.
+            No signup. About 30 seconds from store to first scan — then Research, Analyze, Compare,
+            Improve, Publish on any open tab.
           </p>
           <ol class="steps-list">
             <li>Open KeywordWalks on the <strong>Chrome Web Store</strong></li>
-            <li>Click <strong>Add to Chrome</strong> to install</li>
+            <li>Click <strong>Add to Chrome</strong> — no account required</li>
             <li>Pin KeywordWalks to your toolbar</li>
             <li>Open any page and walk the trail — or press Alt+Shift+S</li>
           </ol>
-          <div class="cta-row">
-            <a
-              class="btn btn-primary"
-              :href="storeUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Install from Chrome Web Store
-            </a>
-            <NuxtLink to="/features" class="btn btn-ghost">Explore every feature</NuxtLink>
+          <div class="cta-stack">
+            <div class="cta-row">
+              <a
+                class="btn btn-primary"
+                :href="storeUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Add to Chrome
+              </a>
+              <NuxtLink to="/features" class="btn btn-ghost">Explore every feature</NuxtLink>
+            </div>
+            <p class="cta-friction">{{ ctaFriction }}</p>
           </div>
         </Reveal>
       </div>
@@ -493,6 +680,14 @@ const freeTeasers = [
   overflow: hidden;
 }
 
+.hero-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+}
+
 .hero-glow {
   position: absolute;
   inset: 10% -10% auto;
@@ -502,7 +697,16 @@ const freeTeasers = [
     radial-gradient(circle at 70% 30%, rgba(124, 255, 107, 0.1), transparent 40%);
   filter: blur(8px);
   pointer-events: none;
-  animation: pulse-line 7s ease-in-out infinite;
+  animation: pulse-line 7s ease-in-out infinite, gradient-drift 14s ease-in-out infinite alternate;
+}
+
+@keyframes gradient-drift {
+  from {
+    transform: translate3d(-2%, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.05);
+  }
 }
 
 .hero-orb {
@@ -599,13 +803,119 @@ const freeTeasers = [
   max-width: 34rem;
   font-size: clamp(1.05rem, 2vw, 1.2rem);
   color: var(--text-muted);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.cta-stack {
+  display: grid;
+  gap: 0.65rem;
 }
 
 .cta-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.cta-friction {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+.demo-wrap {
+  position: relative;
+  padding: 1.75rem 0.5rem 0;
+}
+
+.float-chip {
+  position: absolute;
+  z-index: 2;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 232, 240, 0.25);
+  background: rgba(0, 10, 12, 0.75);
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  animation: chip-float 5.5s ease-in-out infinite;
+}
+
+.hero.ready .float-chip {
+  opacity: 0.85;
+}
+
+@keyframes chip-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.search-mock {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0.75rem 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.search-icon {
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.search-icon::after {
+  content: '';
+  position: absolute;
+  width: 0.35rem;
+  height: 1.5px;
+  background: var(--accent);
+  right: -0.3rem;
+  bottom: -0.15rem;
+  transform: rotate(40deg);
+}
+
+.search-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 1.2em;
+}
+
+.caret {
+  display: inline-block;
+  width: 1.5px;
+  height: 0.9em;
+  margin-left: 1px;
+  background: var(--accent);
+  vertical-align: text-bottom;
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 .hero-demo {
@@ -619,6 +929,17 @@ const freeTeasers = [
   position: relative;
   font: inherit;
   color: inherit;
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(0.97);
+  transition:
+    opacity 0.85s var(--ease-out),
+    transform 0.85s var(--ease-out);
+  will-change: transform;
+}
+
+.hero-demo.ready {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .demo-hint {
@@ -651,15 +972,14 @@ const freeTeasers = [
     inset 0 1px 0 rgba(0, 232, 240, 0.08);
   overflow: hidden;
   transform-origin: center center;
+  will-change: transform;
   transition:
-    transform 0.45s var(--ease-spring),
     box-shadow 0.4s var(--ease-out),
     border-color 0.4s ease;
 }
 
 .hero-demo.active .hero-panel,
 .hero-demo.scanning .hero-panel {
-  transform: scale(1.04);
   border-color: rgba(0, 232, 240, 0.4);
   box-shadow:
     0 36px 90px rgba(0, 0, 0, 0.6),
@@ -717,7 +1037,8 @@ const freeTeasers = [
   z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.2rem;
+  min-width: 5.5rem;
   padding: 0.45rem 0.65rem;
   border-radius: 10px;
   border: 1px solid rgba(0, 232, 240, 0.35);
@@ -735,7 +1056,6 @@ const freeTeasers = [
 .metric-chip.show {
   opacity: 1;
   transform: translateY(0) scale(1);
-  animation: chip-pulse 1.8s ease-in-out infinite;
 }
 
 .metric-label {
@@ -754,14 +1074,73 @@ const freeTeasers = [
   line-height: 1.1;
 }
 
-@keyframes chip-pulse {
-  0%,
-  100% {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(0, 232, 240, 0.12);
-  }
-  50% {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 28px rgba(0, 232, 240, 0.28);
-  }
+.metric-bar {
+  display: block;
+  height: 3px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.metric-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-lime));
+  transition: width 0.1s linear;
+}
+
+.serp-mock {
+  margin: 0.85rem 0.75rem 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.serp-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.55rem;
+}
+
+.serp-mock ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.serp-mock li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 0.3rem 0.4rem;
+  border-radius: 8px;
+  transition:
+    background 0.35s ease,
+    color 0.35s ease,
+    transform 0.35s var(--ease-spring);
+}
+
+.serp-mock li.hot {
+  background: rgba(0, 232, 240, 0.1);
+  color: var(--text);
+  transform: translateX(3px);
+}
+
+.serp-rank {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  width: 1rem;
 }
 
 .trust {
@@ -1170,6 +1549,19 @@ const freeTeasers = [
   .journey {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  .pillar-grid,
+  .teaser-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .float-chip {
+    display: none;
+  }
+
+  .demo-hint {
+    display: none !important;
+  }
 }
 
 @media (max-width: 960px) {
@@ -1204,6 +1596,7 @@ const freeTeasers = [
   .hero {
     min-height: auto;
     padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
   }
 
   .hero-visual {
@@ -1212,6 +1605,7 @@ const freeTeasers = [
 
   .hero-title {
     max-width: none;
+    font-size: clamp(1.85rem, 7.5vw, 2.75rem);
   }
 
   .hero-trail {
@@ -1219,8 +1613,80 @@ const freeTeasers = [
     height: 18%;
   }
 
+  .demo-wrap {
+    padding: 0.5rem 0 0;
+  }
+
+  .search-mock {
+    margin: 0 0 0.65rem;
+  }
+
+  .serp-mock {
+    display: none;
+  }
+
+  .metric-chip {
+    min-width: 4.5rem;
+    padding: 0.35rem 0.5rem;
+  }
+
+  .metric-value {
+    font-size: 0.95rem;
+  }
+
   .cta-panel {
     padding: 2rem 1.25rem;
+  }
+
+  .cta-row {
+    flex-direction: column;
+  }
+
+  .cta-row .btn {
+    width: 100%;
+  }
+
+  .cta-friction {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding-top: 1.75rem;
+    padding-bottom: 2rem;
+  }
+
+  .lede {
+    font-size: 1rem;
+  }
+
+  .metric-chip {
+    top: auto !important;
+    left: auto !important;
+    bottom: 0.65rem;
+    right: 0.65rem;
+  }
+
+  .metric-chip ~ .metric-chip {
+    display: none;
+  }
+
+  .compare-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+}
+
+/* Touch / tablet / phone: never show hover hint */
+@media (hover: none), (pointer: coarse) {
+  .demo-hint {
+    display: none !important;
   }
 }
 
@@ -1232,13 +1698,24 @@ const freeTeasers = [
   .trail-line,
   .trail-dot,
   .scan-beam,
-  .metric-chip.show {
+  .float-chip,
+  .caret,
+  .gradient-drift {
     animation: none !important;
+  }
+
+  .hero-demo {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .hero-demo.active .hero-panel,
   .hero-demo.scanning .hero-panel {
-    transform: none;
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.55),
+      0 0 40px rgba(0, 232, 240, 0.06),
+      inset 0 1px 0 rgba(0, 232, 240, 0.08);
   }
 }
 </style>

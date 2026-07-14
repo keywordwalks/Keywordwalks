@@ -2,9 +2,9 @@
 const storeUrl = 'https://chromewebstore.google.com/'
 
 useSeoMeta({
-  title: 'About KeywordWalks — We show the path, not the noise',
+  title: 'About KeywordWalks — Research workspace, not noise',
   description:
-    'KeywordWalks helps bloggers, creators, and SEO pros walk any page, see what matters, and know what to do next — privately in Chrome.',
+    'KeywordWalks is a private Chrome research workspace. Research, analyze, compare, improve, and publish — for bloggers, creators, and SEO pros.',
 })
 
 const values = [
@@ -66,11 +66,11 @@ const beliefs = [
       <div class="container hero-inner">
         <Reveal as="p" class="eyebrow">About KeywordWalks</Reveal>
         <Reveal as="h1" class="display" variant="blur" :delay="80">
-          We show the path,<br />not the noise.
+          A research workspace<br />for the open tab.
         </Reveal>
         <Reveal as="p" class="lede" :delay="160">
-          KeywordWalks is a Chrome extension for bloggers, content creators, and SEO professionals.
-          Walk any page. See why it ranks. Know what to write or fix next — privately, on your machine.
+          Research. Analyze. Compare. Improve. Publish. KeywordWalks helps bloggers, creators, and
+          SEO professionals walk any page and leave with a clear next step — privately, on your machine.
         </Reveal>
       </div>
     </section>
@@ -164,10 +164,11 @@ const beliefs = [
               target="_blank"
               rel="noopener noreferrer"
             >
-              Install free
+              Add to Chrome
             </a>
             <NuxtLink to="/features" class="btn btn-ghost">Explore features</NuxtLink>
           </div>
+          <p class="cta-friction">No Signup · 30 Seconds Setup</p>
         </Reveal>
       </div>
     </section>
@@ -391,6 +392,20 @@ const beliefs = [
   gap: 0.75rem;
 }
 
+.cta-friction {
+  margin-top: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+@media (max-width: 1100px) {
+  .value-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .story,
   .value-grid {
@@ -399,6 +414,28 @@ const beliefs = [
 
   .cta-panel {
     padding: 2rem 1.25rem;
+  }
+
+  .cta-row {
+    flex-direction: column;
+  }
+
+  .cta-row .btn {
+    width: 100%;
+  }
+
+  .cta-friction {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-hero {
+    padding: 4rem 0 2rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
   }
 }
 

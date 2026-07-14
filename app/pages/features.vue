@@ -2,9 +2,9 @@
 const storeUrl = 'https://chromewebstore.google.com/'
 
 useSeoMeta({
-  title: 'Features — KeywordWalks Chrome SEO extension',
+  title: 'Features — KeywordWalks research workspace',
   description:
-    'Everything behind the trail: 16 SEO analyzers, free History & Compare, tunable Settings, scoring, fixes, and export — for bloggers, creators, and SEO pros.',
+    'Research workspace toolkit: 16 analyzers, History & Compare, Settings, scoring, fixes, and export — Research, Analyze, Compare, Improve, Publish.',
 })
 
 const analyzers = [
@@ -180,7 +180,7 @@ const freeFeatures = [
   {
     id: 'history',
     title: 'Your ranking trail, saved',
-    badge: 'Free forever',
+    badge: 'Included now',
     image: '/histioryfeature.png',
     alt: 'KeywordWalks Audit history showing saved analyses with scores and Open, Compare, Delete actions',
     body: 'Every walk is stored locally — reopen a past audit, filter by title or URL, and pick up where you left off. Your ranking trail stays on this device, not in the cloud.',
@@ -193,7 +193,7 @@ const freeFeatures = [
   {
     id: 'compare',
     title: 'See exactly why their page scores higher',
-    badge: 'Free forever',
+    badge: 'Included now',
     image: '/comparefeature.png',
     alt: 'KeywordWalks Compare view showing score delta and category metrics between two audits',
     body: 'Put your current report next to a saved audit. Score delta plus Content, Technical, Performance, Accessibility — green where you win, red where the gap lives.',
@@ -206,7 +206,7 @@ const freeFeatures = [
   {
     id: 'settings',
     title: 'Tune the walk to your page',
-    badge: 'Free forever',
+    badge: 'Included now',
     image: '/settingsfeature.png',
     alt: 'KeywordWalks Settings panel with broken links, SPA wait, analysis budget, and keyword controls',
     body: 'Broken links, SPA wait, analysis budget, custom target + secondary keywords, side panel, auto-analyze — control depth without leaving Chrome.',
@@ -225,12 +225,12 @@ const freeFeatures = [
       <div class="container">
         <Reveal as="p" class="eyebrow">The toolkit behind the trail</Reveal>
         <Reveal as="h1" class="display" variant="blur" :delay="80">
-          One click. The full path.
+          One workspace. The full path.
         </Reveal>
         <Reveal as="p" class="lede" :delay="160">
-          KeywordWalks turns any open page into a ranking briefing for bloggers, creators, and SEO
-          pros — keywords, structure, blockers, scores, and prioritized fixes. Here’s everything
-          under the hood when you’re ready for the proof.
+          Research. Analyze. Compare. Improve. Publish. KeywordWalks turns any open page into a
+          briefing for bloggers, creators, and SEO pros — then History, Compare, and Settings keep the
+          trail going. No account required.
         </Reveal>
       </div>
     </section>
@@ -289,11 +289,11 @@ const freeFeatures = [
     <section id="workflow-tools" class="section free-section">
       <div class="container">
         <Reveal class="section-head">
-          <p class="eyebrow">Freely included</p>
-          <h2>Premium workflow. Zero paywall.</h2>
+          <p class="eyebrow">Included now</p>
+          <h2>History. Compare. Settings.</h2>
           <p>
-            History, Compare, and Settings ship free with KeywordWalks — no account, no upgrade,
-            no locked “pro” tier. Same tools SEOs expect as paid add-ons, available to every user.
+            History, Compare, and Settings ship with KeywordWalks — no account, no signup wall.
+            Install and start researching in about 30 seconds.
           </p>
         </Reveal>
 
@@ -392,9 +392,12 @@ const freeFeatures = [
             target="_blank"
             rel="noopener noreferrer"
           >
-            Install free
+            Add to Chrome
           </a>
           <NuxtLink to="/about" class="btn btn-ghost">Why KeywordWalks</NuxtLink>
+        </Reveal>
+        <Reveal as="p" class="cta-friction" :delay="200">
+          No Signup · 30 Seconds Setup
         </Reveal>
       </div>
     </section>
@@ -700,6 +703,27 @@ const freeFeatures = [
   gap: 0.75rem;
 }
 
+.cta-friction {
+  margin-top: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+@media (max-width: 1100px) {
+  .free-block,
+  .free-block.reverse {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+  }
+
+  .tab-grid,
+  .settings-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 820px) {
   .analyzer-grid,
   .tab-grid,
@@ -725,6 +749,28 @@ const freeFeatures = [
     padding-left: 0;
     padding-right: 0;
     border-right: none;
+  }
+
+  .cta-row {
+    flex-direction: column;
+  }
+
+  .cta-row .btn {
+    width: 100%;
+  }
+
+  .cta-friction {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-hero {
+    padding: 4rem 0 1.5rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
   }
 }
 </style>

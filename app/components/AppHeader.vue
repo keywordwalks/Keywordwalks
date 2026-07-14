@@ -56,7 +56,7 @@ onMounted(() => {
           rel="noopener noreferrer"
           @click="open = false"
         >
-          Install free
+          Add to Chrome
         </a>
       </nav>
 
@@ -236,6 +236,22 @@ onMounted(() => {
   .nav-cta {
     margin: 0.75rem 0 0;
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .bar {
+    height: 72px;
+  }
+
+  .header.scrolled .bar {
+    height: 64px;
+  }
+
+  .logo,
+  .header.scrolled .logo {
+    height: 2.4rem;
+    max-width: min(200px, 55vw);
   }
 }
 

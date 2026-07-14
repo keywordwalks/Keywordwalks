@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PRIVACY_CONTACT_EMAIL, PRIVACY_CONTACT_MAILTO } from '~/utils/contact'
+
 useSeoMeta({
   title: 'Terms of Service — keywordwalks',
   description:
@@ -10,7 +12,7 @@ useSeoMeta({
   <div class="legal-page">
     <div class="container">
       <Reveal as="h1" variant="blur">Terms of Service</Reveal>
-      <Reveal as="p" class="meta" :delay="80">Last updated: July 13, 2026</Reveal>
+      <Reveal as="p" class="meta" :delay="80">Last updated: July 14, 2026</Reveal>
 
       <Reveal class="legal-prose" :delay="140">
         <p>
@@ -102,8 +104,8 @@ useSeoMeta({
 
         <h2>12. Contact</h2>
         <p>
-          Questions about these Terms can be directed to the project maintainer through the
-          repository or distribution channel where you obtained the Service.
+          Questions about these Terms can be sent to
+          <a :href="PRIVACY_CONTACT_MAILTO">{{ PRIVACY_CONTACT_EMAIL }}</a>.
         </p>
       </Reveal>
     </div>

@@ -49,9 +49,15 @@ onMounted(() => {
         >
           {{ link.label }}
         </NuxtLink>
-        <NuxtLink to="/#get-started" class="btn btn-primary nav-cta" @click="open = false">
-          Get the extension
-        </NuxtLink>
+        <a
+          class="btn btn-primary nav-cta"
+          href="https://chromewebstore.google.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click="open = false"
+        >
+          Install free
+        </a>
       </nav>
 
       <button

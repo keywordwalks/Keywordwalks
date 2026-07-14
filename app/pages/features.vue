@@ -1,8 +1,10 @@
 <script setup lang="ts">
+const storeUrl = 'https://chromewebstore.google.com/'
+
 useSeoMeta({
-  title: 'Features — keywordwalks SEO Chrome extension',
+  title: 'Features — KeywordWalks Chrome SEO extension',
   description:
-    'Full feature list for keywordwalks: 16 SEO analyzers, keyword research, scoring, indexability, history, compare, overlays, exports, and settings for bloggers, creators, and SEO pros.',
+    'Everything behind the trail: 16 SEO analyzers, free History & Compare, tunable Settings, scoring, fixes, and export — for bloggers, creators, and SEO pros.',
 })
 
 const analyzers = [
@@ -173,18 +175,62 @@ const settings = [
   { name: 'Open as side panel', detail: 'Prefer Chrome side panel over the compact popup' },
   { name: 'Auto-analyze on open', detail: 'Run analysis automatically when the UI opens' },
 ]
+
+const freeFeatures = [
+  {
+    id: 'history',
+    title: 'Your ranking trail, saved',
+    badge: 'Free forever',
+    image: '/histioryfeature.png',
+    alt: 'KeywordWalks Audit history showing saved analyses with scores and Open, Compare, Delete actions',
+    body: 'Every walk is stored locally — reopen a past audit, filter by title or URL, and pick up where you left off. Your ranking trail stays on this device, not in the cloud.',
+    points: [
+      'Filter by title or URL',
+      'Open, compare, or delete any saved audit',
+      'Scores and page types at a glance',
+    ],
+  },
+  {
+    id: 'compare',
+    title: 'See exactly why their page scores higher',
+    badge: 'Free forever',
+    image: '/comparefeature.png',
+    alt: 'KeywordWalks Compare view showing score delta and category metrics between two audits',
+    body: 'Put your current report next to a saved audit. Score delta plus Content, Technical, Performance, Accessibility — green where you win, red where the gap lives.',
+    points: [
+      'Current report vs any History audit',
+      'Category-by-category deltas',
+      'Instant competitive briefing — no spreadsheet',
+    ],
+  },
+  {
+    id: 'settings',
+    title: 'Tune the walk to your page',
+    badge: 'Free forever',
+    image: '/settingsfeature.png',
+    alt: 'KeywordWalks Settings panel with broken links, SPA wait, analysis budget, and keyword controls',
+    body: 'Broken links, SPA wait, analysis budget, custom target + secondary keywords, side panel, auto-analyze — control depth without leaving Chrome.',
+    points: [
+      'Override target and secondary keywords',
+      'Balance speed vs. depth with analysis budget',
+      'Popup or full-height side panel',
+    ],
+  },
+]
 </script>
 
 <template>
   <div>
     <section class="page-hero">
       <div class="container">
-        <Reveal as="p" class="eyebrow">Product capabilities</Reveal>
-        <Reveal as="h1" class="display" variant="blur" :delay="80">Features</Reveal>
+        <Reveal as="p" class="eyebrow">The toolkit behind the trail</Reveal>
+        <Reveal as="h1" class="display" variant="blur" :delay="80">
+          One click. The full path.
+        </Reveal>
         <Reveal as="p" class="lede" :delay="160">
-          keywordwalks gives bloggers, content creators, and SEO professionals a complete on-page
-          toolkit: keyword research, indexability checks, content and metadata audits, performance
-          signals, prioritized fixes, history, compare, and export — all on the page you’re viewing.
+          KeywordWalks turns any open page into a ranking briefing for bloggers, creators, and SEO
+          pros — keywords, structure, blockers, scores, and prioritized fixes. Here’s everything
+          under the hood when you’re ready for the proof.
         </Reveal>
       </div>
     </section>
@@ -193,10 +239,10 @@ const settings = [
       <div class="container">
         <Reveal class="section-head">
           <p class="eyebrow">Analysis engine</p>
-          <h2>Sixteen specialized SEO analyzers</h2>
+          <h2>Sixteen analyzers. One clear next step.</h2>
           <p>
-            Each analyzer contributes issues, positives, and signals that feed your score and
-            recommendations — so you can improve content quality, metadata, structure, indexing, and more.
+            Each analyzer feeds issues, positives, and signals into your score — so you write
+            faster, fix what blocks rankings, and compete with a path instead of a pile of data.
           </p>
         </Reveal>
 
@@ -219,10 +265,10 @@ const settings = [
       <div class="container">
         <Reveal class="section-head">
           <p class="eyebrow">Report workspace</p>
-          <h2>Tabs built for SEO workflows</h2>
+          <h2>Tabs built for how you ship</h2>
           <p>
-            Move from overview insights to deep sections, then close the loop in Fixes — the same
-            flow editors and SEO consultants use when improving rankings.
+            Overview → depth → Fixes. The same loop bloggers, creators, and SEO consultants use when
+            they need readers, clicks, and a client-ready trail of what changed.
           </p>
         </Reveal>
         <div class="tab-grid">
@@ -237,6 +283,49 @@ const settings = [
             <p>{{ item.body }}</p>
           </Reveal>
         </div>
+      </div>
+    </section>
+
+    <section id="workflow-tools" class="section free-section">
+      <div class="container">
+        <Reveal class="section-head">
+          <p class="eyebrow">Freely included</p>
+          <h2>Premium workflow. Zero paywall.</h2>
+          <p>
+            History, Compare, and Settings ship free with KeywordWalks — no account, no upgrade,
+            no locked “pro” tier. Same tools SEOs expect as paid add-ons, available to every user.
+          </p>
+        </Reveal>
+
+        <article
+          v-for="(item, index) in freeFeatures"
+          :id="item.id"
+          :key="item.id"
+          class="free-block"
+          :class="{ reverse: index % 2 === 1 }"
+        >
+          <Reveal class="free-visual" :variant="index % 2 === 1 ? 'left' : 'right'" :delay="60">
+            <div class="shot-panel">
+              <img
+                class="shot"
+                :src="item.image"
+                :alt="item.alt"
+                width="960"
+                height="720"
+                loading="lazy"
+                decoding="async"
+              >
+            </div>
+          </Reveal>
+          <Reveal class="free-copy" :variant="index % 2 === 1 ? 'right' : 'left'" :delay="120">
+            <span class="free-badge">{{ item.badge }}</span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.body }}</p>
+            <ul>
+              <li v-for="point in item.points" :key="point">{{ point }}</li>
+            </ul>
+          </Reveal>
+        </article>
       </div>
     </section>
 
@@ -259,10 +348,10 @@ const settings = [
       <div class="container">
         <Reveal class="section-head">
           <p class="eyebrow">Configuration</p>
-          <h2>Settings that shape each run</h2>
+          <h2>Tune the walk to your pace</h2>
           <p>
-            Tune depth vs. speed, set keywords for research, and choose how the extension opens —
-            then save and re-analyze to measure ranking-ready improvements.
+            Depth vs. speed, target keywords, side panel or popup — then re-walk after edits to prove
+            what improved.
           </p>
         </Reveal>
         <ul class="settings-list">
@@ -283,22 +372,29 @@ const settings = [
       <div class="container">
         <Reveal class="section-head">
           <p class="eyebrow">Built to win</p>
-          <h2>Turn every page into a ranking opportunity</h2>
+          <h2>Walk any page. Leave with a plan.</h2>
           <p>
-            keywordwalks gives bloggers, creators, and SEO pros a clear path from audit to action —
-            so you fix what matters, ship faster, and improve visibility with confidence.
+            Faster drafts. Competitive paths. More clicks. Pages that can climb. KeywordWalks is the
+            trail from the open tab to those outcomes — privately, in Chrome.
           </p>
         </Reveal>
         <Reveal as="ul" class="limits-list" :delay="80">
-          <li>See keyword gaps, metadata issues, and structure problems in one local pass</li>
+          <li>Find keyword gaps and competitive structure in one local pass</li>
           <li>Prioritized fixes you can apply immediately — not vague advice</li>
-          <li>Catch indexability blockers before they cost you crawl budget</li>
-          <li>Re-audit after edits to prove what improved and what still needs work</li>
-          <li>Keep drafts and client sites private while you optimize for search</li>
+          <li>Catch indexing blockers before they cost you readers</li>
+          <li>Re-walk after edits to prove what improved and what’s still open</li>
+          <li>Keep drafts and client sites private while you optimize</li>
         </Reveal>
         <Reveal class="cta-row" :delay="160">
-          <NuxtLink to="/#get-started" class="btn btn-primary">Get started</NuxtLink>
-          <NuxtLink to="/about" class="btn btn-ghost">About keywordwalks</NuxtLink>
+          <a
+            class="btn btn-primary"
+            :href="storeUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Install free
+          </a>
+          <NuxtLink to="/about" class="btn btn-ghost">Why KeywordWalks</NuxtLink>
         </Reveal>
       </div>
     </section>
@@ -368,6 +464,116 @@ const settings = [
 
 .tabs-section {
   background: linear-gradient(180deg, transparent, rgba(0, 232, 240, 0.03), transparent);
+}
+
+.free-section {
+  background:
+    radial-gradient(ellipse 50% 40% at 0% 20%, rgba(0, 232, 240, 0.06), transparent 55%),
+    radial-gradient(ellipse 40% 35% at 100% 60%, rgba(124, 255, 107, 0.04), transparent 50%);
+}
+
+.free-block {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2.75rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.free-block:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.free-block.reverse {
+  grid-template-columns: 0.85fr 1.15fr;
+}
+
+.free-block.reverse .free-visual {
+  order: 2;
+}
+
+.free-block.reverse .free-copy {
+  order: 1;
+}
+
+.shot-panel {
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  background: #050505;
+  overflow: hidden;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    0 0 36px rgba(0, 232, 240, 0.06),
+    inset 0 1px 0 rgba(0, 232, 240, 0.08);
+  transition: border-color 0.35s ease, box-shadow 0.35s var(--ease-out);
+}
+
+.shot-panel:hover {
+  border-color: rgba(0, 232, 240, 0.35);
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.5),
+    0 0 48px rgba(0, 232, 240, 0.1),
+    inset 0 1px 0 rgba(0, 232, 240, 0.12);
+}
+
+.shot {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.free-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.85rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #001214;
+  background: linear-gradient(135deg, var(--accent), var(--accent-lime));
+}
+
+.free-copy h3 {
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  margin-bottom: 0.75rem;
+}
+
+.free-copy > p {
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  margin-bottom: 1.15rem;
+  max-width: 32rem;
+}
+
+.free-copy ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.free-copy li {
+  position: relative;
+  padding-left: 1.15rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.free-copy li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(0, 232, 240, 0.45);
 }
 
 .tab-grid {
@@ -498,8 +704,20 @@ const settings = [
   .analyzer-grid,
   .tab-grid,
   .group,
-  .settings-list {
+  .settings-list,
+  .free-block,
+  .free-block.reverse {
     grid-template-columns: 1fr;
+  }
+
+  .free-block.reverse .free-visual,
+  .free-block.reverse .free-copy {
+    order: unset;
+  }
+
+  .free-block {
+    gap: 1.5rem;
+    padding: 2rem 0;
   }
 
   .analyzer:nth-child(odd),

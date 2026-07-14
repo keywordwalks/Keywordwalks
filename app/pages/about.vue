@@ -1,40 +1,42 @@
 <script setup lang="ts">
+const storeUrl = 'https://chromewebstore.google.com/'
+
 useSeoMeta({
-  title: 'About — keywordwalks for bloggers, creators & SEO pros',
+  title: 'About KeywordWalks — We show the path, not the noise',
   description:
-    'keywordwalks helps bloggers, content creators, and SEO professionals improve search visibility with private, on-page keyword research, SEO audits, and indexing checks in Chrome.',
+    'KeywordWalks helps bloggers, creators, and SEO pros walk any page, see what matters, and know what to do next — privately in Chrome.',
 })
 
 const values = [
   {
-    title: 'Built for publishers',
-    body: 'Bloggers and creators get clear checks on titles, keywords, structure, and content quality before and after publishing.',
+    title: 'Bloggers',
+    body: 'Publish with a clear briefing: titles, keywords, structure, and gaps — so posts earn readers instead of sitting in drafts.',
   },
   {
-    title: 'Built for SEO pros',
-    body: 'Consultants and in-house SEOs get technical indexability, scoring, history, compare, overlays, and client-ready PDF/JSON exports.',
+    title: 'Content creators',
+    body: 'Reverse a competitor page into direction for your next piece: depth, hooks, and structure before you write.',
   },
   {
-    title: 'Private by default',
-    body: 'Every audit runs in your browser. Drafts, staging URLs, and client sites never leave your machine for analysis.',
+    title: 'SEO professionals',
+    body: 'Audit, compare, export, and explain. Prioritized fixes and history for clients — without drowning them in charts.',
   },
 ]
 
 const beliefs = [
   {
     step: '01',
-    title: 'Keyword research where the page lives',
-    body: 'Discover terms on the live DOM, set a target keyword, and verify placement across the signals that matter for ranking and relevance.',
+    title: 'Clarity over volume',
+    body: 'Most SEO tools overwhelm. KeywordWalks tells you what matters on the open page, why it matters, and what to do next.',
   },
   {
     step: '02',
-    title: 'On-page SEO you can act on',
-    body: 'Metadata, headings, content depth, images, links, and schema become prioritized fixes with suggested changes and copy-ready snippets.',
+    title: 'Walk where the page lives',
+    body: 'Their blog, your draft, a client URL — reverse the ranking trail in Chrome, on the live DOM, with no cloud scrape.',
   },
   {
     step: '03',
-    title: 'Indexing and visibility, step by step',
-    body: 'Catch technical blockers, track audits over time, and re-check until the page is healthier for crawl, index, and higher search visibility.',
+    title: 'Outcomes, not jargon',
+    body: 'Faster drafts. Competitive paths. More clicks. Pages that can actually climb. That’s the finish line — SERPs are just the map.',
   },
 ]
 </script>
@@ -43,15 +45,32 @@ const beliefs = [
   <div>
     <section class="page-hero">
       <div class="hero-glow" aria-hidden="true" />
+      <svg class="hero-trail" viewBox="0 0 1200 200" fill="none" aria-hidden="true">
+        <path
+          class="trail-line"
+          d="M20 140 C160 100, 260 60, 400 90 S620 170, 780 110 S1000 40, 1180 70"
+          stroke="url(#aboutTrail)"
+          stroke-width="1.5"
+          stroke-dasharray="6 10"
+          stroke-linecap="round"
+        />
+        <defs>
+          <linearGradient id="aboutTrail" x1="0" y1="0" x2="1200" y2="0">
+            <stop stop-color="#00e8f0" stop-opacity="0" />
+            <stop offset="0.4" stop-color="#00e8f0" stop-opacity="0.5" />
+            <stop offset="0.75" stop-color="#7cff6b" stop-opacity="0.4" />
+            <stop offset="1" stop-color="#7cff6b" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+      </svg>
       <div class="container hero-inner">
-        <Reveal as="p" class="eyebrow">About keywordwalks</Reveal>
+        <Reveal as="p" class="eyebrow">About KeywordWalks</Reveal>
         <Reveal as="h1" class="display" variant="blur" :delay="80">
-          SEO tools for people<br />who publish and rank
+          We show the path,<br />not the noise.
         </Reveal>
         <Reveal as="p" class="lede" :delay="160">
-          keywordwalks is designed primarily for bloggers, content creators, and SEO professionals
-          who want to improve website search performance — with keyword research, on-page analysis,
-          indexing checks, and actionable ranking insights inside Chrome.
+          KeywordWalks is a Chrome extension for bloggers, content creators, and SEO professionals.
+          Walk any page. See why it ranks. Know what to write or fix next — privately, on your machine.
         </Reveal>
       </div>
     </section>
@@ -59,24 +78,22 @@ const beliefs = [
     <section class="section">
       <div class="container story">
         <Reveal class="story-copy" variant="left">
-          <p class="eyebrow">Our purpose</p>
-          <h2>Help you increase visibility without cloud risk</h2>
+          <p class="eyebrow">Our philosophy</p>
+          <h2>Most SEO tools overwhelm you with data.</h2>
           <p class="muted">
-            Improving search rankings usually means juggling keyword research, metadata, page
-            structure, technical SEO, and performance. keywordwalks brings those checks to the open
-            tab: analyze the rendered page, identify issues that hurt indexing, optimize essential
-            SEO metrics, and ship fixes with confidence.
+            KeywordWalks tells you exactly what matters, why it matters, and what to do next. That
+            isn’t a feature list — it’s the product identity.
           </p>
           <p class="muted">
-            Whether you’re drafting a blog post, refining a landing page, or auditing a client site,
-            you get insights into content quality, metadata, structure, performance, and other
-            ranking signals — privately, on your machine.
+            Open a competitor. Open a draft. Open a client site. Walk the ranking trail in place:
+            keywords they underplayed, structure that earns clicks, blockers that stop indexing —
+            then ship the change.
           </p>
         </Reveal>
         <Reveal class="story-panel" variant="right" :delay="120" aria-hidden="true">
           <img src="/favicon.png" alt="" width="120" height="120" class="mark" />
-          <p class="panel-label">KEYWORDS · RESEARCH · SEO</p>
-          <p class="panel-line">Bloggers · Creators · SEO professionals</p>
+          <p class="panel-label">WALK · FIND · FIX</p>
+          <p class="panel-line">Readers · Revenue · Faster drafts</p>
         </Reveal>
       </div>
     </section>
@@ -85,8 +102,8 @@ const beliefs = [
       <div class="container">
         <Reveal class="section-head">
           <p class="eyebrow">Who we serve</p>
-          <h2>One extension, three core audiences</h2>
-          <p>Same powerful audit — tuned language and workflows for how each audience ships work.</p>
+          <h2>One trail. Three audiences.</h2>
+          <p>Same private audit — outcomes tuned to how you actually ship work.</p>
         </Reveal>
         <div class="value-grid">
           <Reveal
@@ -107,10 +124,10 @@ const beliefs = [
     <section class="section">
       <div class="container">
         <Reveal class="section-head">
-          <p class="eyebrow">How we help you rank</p>
-          <h2>Research. Optimize. Improve indexing.</h2>
+          <p class="eyebrow">How we think</p>
+          <h2>Walk their page. Write yours.</h2>
           <p>
-            Ranking isn’t a single score — it’s a path. keywordwalks walks that path with you on
+            Ranking isn’t a single score — it’s a path. KeywordWalks walks that path with you on
             every page you open.
           </p>
         </Reveal>
@@ -136,14 +153,20 @@ const beliefs = [
       <div class="container">
         <Reveal class="cta-panel" variant="scale">
           <p class="eyebrow">Next step</p>
-          <h2>See the full SEO toolkit</h2>
+          <h2>Ready to walk your first page?</h2>
           <p class="muted">
-            Explore sixteen analyzers, scoring, Fixes checklist, history, compare, overlays, and
-            export — or install the extension and audit your first page.
+            Explore the full toolkit — or install from the Chrome Web Store and reverse a page today.
           </p>
           <div class="cta-row">
-            <NuxtLink to="/features" class="btn btn-primary">Explore features</NuxtLink>
-            <NuxtLink to="/#get-started" class="btn btn-ghost">Get started</NuxtLink>
+            <a
+              class="btn btn-primary"
+              :href="storeUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Install free
+            </a>
+            <NuxtLink to="/features" class="btn btn-ghost">Explore features</NuxtLink>
           </div>
         </Reveal>
       </div>
@@ -172,8 +195,28 @@ const beliefs = [
   animation: pulse-line 8s ease-in-out infinite;
 }
 
+.hero-trail {
+  position: absolute;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: 40%;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.trail-line {
+  animation: trail-dash 18s linear infinite;
+}
+
+@keyframes trail-dash {
+  to {
+    stroke-dashoffset: -320;
+  }
+}
+
 .hero-inner {
   position: relative;
+  z-index: 1;
 }
 
 .page-hero h1 {
@@ -360,7 +403,8 @@ const beliefs = [
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-glow {
+  .hero-glow,
+  .trail-line {
     animation: none !important;
   }
 }

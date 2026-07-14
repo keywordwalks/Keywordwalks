@@ -14,8 +14,8 @@ const year = new Date().getFullYear()
           height="72"
         >
         <p class="muted">
-          For bloggers, content creators, and SEO professionals. Keyword research, on-page SEO,
-          indexing checks, and ranking insights — analyzed privately in Chrome.
+          Walk any page. Find what competitors forgot. Write faster, earn more clicks, and fix what
+          blocks rankings — privately in Chrome.
         </p>
       </div>
 
@@ -24,7 +24,7 @@ const year = new Date().getFullYear()
         <NuxtLink to="/">Home</NuxtLink>
         <NuxtLink to="/features">Features</NuxtLink>
         <NuxtLink to="/about">About</NuxtLink>
-        <NuxtLink to="/#get-started">Get started</NuxtLink>
+        <NuxtLink to="/#get-started">Install</NuxtLink>
       </div>
 
       <div class="col">
